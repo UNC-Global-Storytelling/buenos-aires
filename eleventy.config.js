@@ -5,6 +5,10 @@ import pluginNavigation from "@11ty/eleventy-navigation";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import pluginFilters from "./_config/filters.js";
 import path from "node:path";
+import postcss from "postcss";
+import tailwindcss from "tailwindcss";
+import autoprefixer from "autoprefixer";
+
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default async function(eleventyConfig) {
@@ -30,8 +34,18 @@ export default async function(eleventyConfig) {
 	// Watch images for the image pipeline.
 	eleventyConfig.addWatchTarget("content/**/*.{svg,webp,png,jpg,jpeg,gif}");
 
+	  // PostCSS filter for tailwindcss
+	  eleventyConfig.addNunjucksAsyncFilter('postcss', (cssCode, done) => {
+		postcss([tailwindcss(), autoprefixer()])
+		  .process(cssCode, { from: undefined })
+		  .then(
+			(r) => done(null, r.css),
+			(e) => done(e, null)
+		  )
+	  })
+
 	eleventyConfig.addWatchTarget('tailwind.config.js')
-	eleventyConfig.addWatchTarget('public/styles/tailwind.css')
+	eleventyConfig.addWatchTarget('public/styles/*.css')
 
 	// Per-page bundles, see https://github.com/11ty/eleventy-plugin-bundle
 	// Adds the {% css %} paired shortcode
