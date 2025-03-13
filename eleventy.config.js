@@ -35,13 +35,13 @@ export default async function(eleventyConfig) {
 
 	// Per-page bundles, see https://github.com/11ty/eleventy-plugin-bundle
 	// Adds the {% css %} paired shortcode
-	// eleventyConfig.addBundle("css", {
-	// 	toFileDirectory: "dist",
-	// });
-	// // Adds the {% js %} paired shortcode
-	// eleventyConfig.addBundle("js", {
-	// 	toFileDirectory: "dist",
-	// });
+	eleventyConfig.addBundle("css", {
+		toFileDirectory: "dist",
+	});
+	// Adds the {% js %} paired shortcode
+	eleventyConfig.addBundle("js", {
+		toFileDirectory: "dist",
+	});
 
 	// Official plugins
 	eleventyConfig.addPlugin(pluginSyntaxHighlight, {
