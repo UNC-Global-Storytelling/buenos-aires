@@ -3,8 +3,8 @@ import { feedPlugin } from "@11ty/eleventy-plugin-rss";
 import pluginSyntaxHighlight from "@11ty/eleventy-plugin-syntaxhighlight";
 import pluginNavigation from "@11ty/eleventy-navigation";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
-
 import pluginFilters from "./_config/filters.js";
+import path from "node:path";
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default async function(eleventyConfig) {
@@ -21,13 +21,17 @@ export default async function(eleventyConfig) {
 		.addPassthroughCopy({
 			"./public/": "/"
 		})
-		.addPassthroughCopy("./content/feed/pretty-atom-feed.xsl");
-
+		.addPassthroughCopy("./content/feed/pretty-atom-feed.xsl")
+		.addPassthroughCopy("admin/");
+		
 	// Run Eleventy when these files change:
 	// https://www.11ty.dev/docs/watch-serve/#add-your-own-watch-targets
 
 	// Watch images for the image pipeline.
 	eleventyConfig.addWatchTarget("content/**/*.{svg,webp,png,jpg,jpeg,gif}");
+
+	eleventyConfig.addWatchTarget('tailwind.config.js')
+	eleventyConfig.addWatchTarget('public/styles/tailwind.css')
 
 	// Per-page bundles, see https://github.com/11ty/eleventy-plugin-bundle
 	// Adds the {% css %} paired shortcode
@@ -75,14 +79,17 @@ export default async function(eleventyConfig) {
 	// Image optimization: https://www.11ty.dev/docs/plugins/image/#eleventy-transform
 	eleventyConfig.addPlugin(eleventyImageTransformPlugin, {
 		// Output formats for each image.
-		formats: ["avif", "webp", "auto"],
+		formats: ["webp", "jpeg", "auto"],
 
-		// widths: ["auto"],
+		// Outputs widths
+		widths: ["auto"],
 
 		failOnError: false,
 		htmlOptions: {
 			imgAttributes: {
 				// e.g. <img loading decoding> assigned on the HTML tag will override these values.
+				alt: "", //required
+				sizes: "auto",
 				loading: "lazy",
 				decoding: "async",
 			}
@@ -91,6 +98,13 @@ export default async function(eleventyConfig) {
 		sharpOptions: {
 			animated: true,
 		},
+
+		filenameFormat: function (id, src, width, format, options) {
+			const extension = path.extname(src);
+			const name = path.basename(src, extension);
+
+			return `${name}-${width}w.${format}`;
+		}
 	});
 
 	// Filters
@@ -124,7 +138,8 @@ export const config = {
 		"html",
 		"liquid",
 		"11ty.js",
-		"pug"
+		"pug",
+		"ejs"
 	],
 
 	// Pre-process *.md files with: (default: `liquid`)

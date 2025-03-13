@@ -8,7 +8,7 @@
 		"build-nocolor": "cross-env NODE_DISABLE_COLORS=1 npx @11ty/eleventy",
 		"build-ghpages": "npx @11ty/eleventy --pathprefix=/eleventy-base-blog/",
 		"start": "npx @11ty/eleventy --serve --quiet",
-		"start-css": "concurrently \"npx tailwindcss -i ./public/css/index.css -o ./_site/css/styles.css --watch \" \"npx @11ty/eleventy --serve\"",
+		"start-css": "concurrently \"npx tailwindcss -i ./public/css/index.css -o ./_site/css/styles.css --watch --postcss \" \"npx @11ty/eleventy --serve\"",
 		"start-ghpages": "npx @11ty/eleventy --pathprefix=/eleventy-base-blog/ --serve --quiet",
 		"debug": "cross-env DEBUG=Eleventy* npx @11ty/eleventy",
 		"debugstart": "cross-env DEBUG=Eleventy* npx @11ty/eleventy --serve --quiet",
@@ -45,12 +45,13 @@
 		"cross-env": "^7.0.3",
 		"luxon": "^3.5.0",
 		"postcss": "^8.5.3",
-		"tailwindcss": "^4.0.9",
+		"tailwindcss": "^4.0.14",
 		"zod": "^3.23.8",
 		"zod-validation-error": "^3.3.1"
 	},
 	"dependencies": {
 		"@tailwindcss/cli": "^4.0.9",
+		"@tailwindcss/postcss": "^4.0.14",
 		"@zachleat/heading-anchors": "^1.0.1"
 	}
 }
