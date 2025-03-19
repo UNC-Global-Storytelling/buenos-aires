@@ -1,5 +1,5 @@
 module.exports = {
-    content: ['_site/**/*.{html,njk,md,pug}'],
+    content: ['_site/**/*.{html,njk,md,pug,js}'],
     safelist: [],
     theme: {
       extend: {
